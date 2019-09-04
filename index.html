@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    </head>
+<body>
+    <p>
+            <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css">
+            <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js"></script>
+            <script src="https://tyrasd.github.io/osmtogeojson/osmtogeojson.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@mapbox/polyline@1.0.0/src/polyline.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.min.js"></script>
+    </p>
+    <script src="/~zerasul/liboconmap/GuadecMap.js" ></script>
+    <style>
+        
+    #map {
+        margin: 0;
+        height: 600px;
+        width: 100%;
+    }
+    .mapboxgl-popup-content a {
+        color: #4a86cf;
+        text-decoration-line: none;
+    }
+    .mapboxgl-popup-content ul {
+        padding-left: 18px;
+    }
+    .osm-source{
+        font-size: 0.7em;
+    }
+    .mapboxgl-popup-tip{
+        display:none;
+    }
+    .mapboxgl-popup-content{
+        padding: 5px;
+    }
+    .mapboxgl-popup-anchor-bottom .mapboxgl-popup-content{
+        border: 1px solid #4a86cf;
+    }
+    .mapboxgl-popup-anchor-top .mapboxgl-popup-content{
+        background-color: #B4C6DD;
+    }
+    .mapboxgl-popup-content p {
+        margin: 0;
+        max-width: 100px;
+    }
+    .mapboxgl-popup-content h3 {
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+    .mapboxgl-popup-close-button{
+        color: #4a86cf;
+    }
+
+    </style>
+    <div id="map" class="mapboxgl-map"></div>
+
+    <script type="module">
+        
+    
+    /* parameters */
+    var options = {/* List of ways to include in the map */
+        osm_ways : [
+            { osm_id: 27152910, name: 'Railway Station', icon: 'rail-45'}, // almeria railway
+            // 27152911, // Estación intermodal
+            { osm_id: 27152911, icon: 'bus-45'}, // Estación intermodal
+            { osm_id: 29220363, icon: 'marker-45'}, // almeria university
+            { osm_id: 435775764, icon: 'lodging-45'}, // Civitas
+            { osm_id:37923960, icon: 'airport-45'}, // airport
+            { osm_id: 36406179, name: 'UAL Parking', icon: 'parking-45'}, // UAL parking
+            { osm_id: 187198138, icon: 'bar-45'}, // Chiringuito
+
+            { osm_id: 27155530, name: 'Alcazaba meeting point', icon: 'marker-45'},
+            { osm_id: 27018547, name: 'Alcazaba de Almería', icon: 'marker-45'},
+            { osm_id: 37639082, name: 'Auditorium', icon: 'marker-45'},
+            { osm_id: 37639116, name: 'Conference Room', icon: 'marker-45'},
+            { osm_id: 37639300, name: 'University cafeteria', icon:'restaurant-45'},
+        ],
+        /* List of nodes to include in the map */
+        osm_nodes : [
+            { osm_id: 2870058034, name: 'Intermodal bus stop',icon: 'bus-45'}, // 292
+            { osm_id: 974730957, icon: 'bus-45'}, // 144
+            { osm_id: 469474242, icon: 'bus-45'}, // 71
+            { osm_id: 469474241, icon: 'bus-45'},  //56
+            { osm_id: 2306864400, icon: 'bus-45'}, 
+            { osm_id: 1304074112, name: 'Airport bus stop',icon: 'bus-45'}, // 188
+            { osm_id: 999522025, name: 'ATM', icon: 'bank-45'}, // ATM machine
+            { osm_id: 5732671649, icon: 'rocket-45'},
+            { osm_id: 4441572589, icon: 'cafe-45'},
+            { osm_id: 975927412, icon: 'cafe-45'},
+            { osm_id: 975928504, icon: 'cafe-45'},
+            { osm_id: 975927743, icon: 'cafe-45'},
+            { osm_id: 4418928340, name: 'La Bambalina', icon: 'restaurant-45'},
+            { osm_id: 3421378813, name: 'Bella Ciao', icon: 'restaurant-45'},
+            { osm_id: 159008541, name: 'El Rincon de Basi', icon: 'restaurant-45'},
+            { osm_id: 5741050051, name: 'Scondite', icon: 'restaurant-45'},
+            { osm_id: 4414078515, name: 'Jauja', icon: 'restaurant-45'},
+            { osm_id: 27197952, name: 'Mr Beers', icon: 'restaurant-45'},
+            { osm_id: 4498384277, name: 'Piscolabis', icon: 'restaurant-45'},
+            { osm_id: 4523577353, name: 'Vintage54', icon: 'restaurant-45'},
+        ],
+        /* 
+            list of routes to render 
+            FROM and TO need are OSM node identifiers
+            It's BETTER if all nodes are already in the
+            osm_nodes list but not mandatory.
+        */
+        routes : [
+            {
+                waypoints: [2870058034, 435775764, 974730957],
+                title: 'LIBOCON bus',
+                description: 'LIBOCON direct bus route',
+                color: '#f00'
+            },
+            {
+                waypoints: [2306864400, 27155530],
+                method: 'walking',                 
+                title: 'to the castle',
+                description: 'Walk route from the bus stop to the visit starting point',
+                color: '#526635'
+            },
+            
+            {
+                waypoints: [435775764, 187198138],
+                method: 'walking', 
+                title: 'to the beach party',
+                description: 'Walk route from Civitas to the chiringuito',
+                color: '#006dff'
+            }            
+        ],
+        /* Basemap Styles
+        OpenMapTiles https://openmaptiles.github.io/positron-gl-style/style-cdn.json
+        CARTO https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json
+        */
+        basemap_style : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+        /* initial center and zoom level, you can use bboxfinder.com to find proper values */
+        center : [-2.421,36.823],
+        zoom   : 12,
+        /* Main color to use anywhere */
+        main_color : '#4a86cf',
+        /* Icon for the points ont the map */
+        icon : 'marker-45',
+        /* White list of properties to allow to
+        be displayed in the popup, order matters! */
+        popup_properties : [
+            'description',
+            'shop','amenity','wheelchair',
+            'highway', 'network', 'bench', 'shelter', 'ref',
+            'adr:street', 'picture',
+            'website','wikidata','wikipedia'
+        ],
+        mapbox_token :  'pk.eyJ1IjoieHVyeG9zYW56IiwiYSI6ImNqaXk4NW40MTA3NWUzcG5vMjlobWk2dGIifQ.iI-Ns8Qh5uEg9dDwZnnecw',
+        tweak_style : function(style,options){
+            style['name'] = 'guadec_voyager';
+            style['id'] = 'guadec_voyager';
+            style['layers'] = style.layers.filter( l => l.id != 'place_suburbs' && l.id != 'building-top');
+            var guadec_light_color =  tinycolor(options.main_color).lighten(35).toHexString();
+
+            var building_layer = style.layers.filter(l => l.id == 'building');
+            if ( building_layer.length ==1 ){
+                building_layer[0].paint['fill-color'] = guadec_light_color;
+            }
+
+            return style
+        },
+        /* Try to detect development environment */
+        environment : window.location.href.search('localhost') != -1 ? 'DEV' : 'PROD'
+    };
+
+    var guadec_map = new GuadecMap(options);
+    var map = null;
+
+    // Promise to load the map
+    var get_map = new Promise((resolve,reject)=>{
+        // Get the map
+        guadec_map.init_map().then(map => {
+            // Do some style tweaks and then return it
+            map.on('load',function(){
+                resolve();
+            });
+        });
+    });
+
+    // Promise to load the data from OSM
+    var get_data = new Promise((resolve,reject) => {
+        guadec_map.fetch_data().then(osm_data => {
+            guadec_map.process_osm_data(osm_data);
+            resolve();
+        }).catch(error =>reject(error));
+    });
+
+    // When map and OSM data are retrieved, we can load POIS and Routes
+    Promise.all([
+        get_map,
+        get_data
+    ]).then(() => {
+        // Load the Routes
+        guadec_map.load_routes();
+        // Load the POIS
+        guadec_map.load_pois();
+    }).catch(error => console.log(error));
+
+    // make the map a global for testing
+    window.guadec_map = map;
+
+    </script>
+    
+</body>
+</html>

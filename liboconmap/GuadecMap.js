@@ -151,7 +151,7 @@ class GuadecMap {
                     style['sprite'] = 'http://localhost:8000/liboconmap/sprite';
                 } else {
                     console.log('Using guadecwebsite sprite');
-                    style['sprite'] = 'http://olea.org/~zerasul/liboconmap/sprite';
+                    style['sprite'] = 'https://zerasul.github.io/liboconmap/liboconmap/sprite';
                 }
 
                 var map = new mapboxgl.Map({

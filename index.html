@@ -72,8 +72,8 @@
             
             { osm_id:37923960, icon: 'airport-45'}, // airport
             { osm_id: 36406179, name: 'UAL Parking', icon: 'parking-45'}, // UAL parking
-          
-
+            { osm_id: 187403583, icon: 'bar-45'},
+            
             
             { osm_id: 37639082, name: 'Auditorium', icon: 'marker-45'},
             { osm_id: 37639116, name: 'Conference Room', icon: 'marker-45'},
@@ -83,7 +83,12 @@
         osm_nodes : [
             { osm_id: 2870058034, name: 'Intermodal bus stop',icon: 'bus-45'}, // 292
             { osm_id: 974730957, icon: 'bus-45'}, // 144
-            
+            { osm_id: 5741050051, icon: 'restaurant-45'},
+            { osm_id: 5791954500, icon: 'restaurant-45'},
+            { osm_id: 4498384277, icon: 'restaurant-45'},
+            { osm_id: 4523577353, name:'vintage 54', icon: 'restaurant-45'},
+            { osm_id: 4496965504, icon: 'restaurant-45'},
+            { osm_id: 4525087818, icon: 'restaurant-45'},
             { osm_id: 6653137274, name:"Civitas Dormitory", icon: 'lodging-45'}, // Civitas
             { osm_id: 6554788726, name: 'Railway Station', icon: 'rail-45'},
             { osm_id: 5922500443, icon: 'bus-45'}, // Estación intermodal
@@ -104,7 +109,19 @@
             osm_nodes list but not mandatory.
         */
         routes : [
-                    
+        {
+                waypoints: [6653137274, 418977113],
+                title: 'LIBOCON bus',
+                description: 'LIBOCON direct bus route',
+                color: '#f00'
+            },
+            {
+                waypoints: [6653137274, 1981049551],
+                method: 'walking', 
+                title: 'to the beach party',
+                description: 'Walk route from Civitas to the chiringuito',
+                color: '#006dff'
+            } 
         ],
         /* Basemap Styles
         OpenMapTiles https://openmaptiles.github.io/positron-gl-style/style-cdn.json
